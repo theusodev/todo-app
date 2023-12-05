@@ -1,5 +1,5 @@
-const express = require("express")
-const exphbs = require("express-handlebars")
+const express = require('express')
+const exphbs = require('express-handlebars')
 const mysql = require("mysql2")
 
 const app = express()
@@ -17,6 +17,18 @@ app.use(express.urlencoded({
 app.use(express.json())
 
 //rotas
+app.get('/limpartarefas', (requisicao, resposta) => {
+    const sql = 'DELETE FROM tarefas'
+
+    conexao.query(sql, (erro) => {
+        if (erro) {
+            return console.log(erro)
+        }
+
+        resposta.redirect('/')
+    })
+})
+
 app.post('/excluir', (requisicao, resposta) => {
     const id = requisicao.body.id
 
@@ -29,7 +41,7 @@ app.post('/excluir', (requisicao, resposta) => {
         if (erro) {
             return console.log(erro)
         }
-
+        
         resposta.redirect('/')
     })
 })
@@ -138,7 +150,7 @@ app.get('/ativas', (requisicao, resposta) => {
     })
 })
 
-app.get('/', (requisicao, resposta) => {
+app.get('/', (requisicao, resposta)=>{
     const sql = 'SELECT * FROM tarefas'
 
     conexao.query(sql, (erro, dados) => {
@@ -162,7 +174,7 @@ app.get('/', (requisicao, resposta) => {
 
         resposta.render('home', { tarefas, quantidadeTarefasAtivas });
     })
-    
+
 })
 
 const conexao = mysql.createConnection({
